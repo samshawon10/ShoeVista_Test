@@ -7,16 +7,21 @@ import router from "./routes/productRoutes.js";
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI;
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173/"
+
+app.use(cors({origin:FRONTEND_URL}));
 
 app.use(cors());
 
 app.use(express.json());
 
-const PORT = process.env.PORT || 5000;
+app.use('/api',router);
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(MONGO_URI);
     console.log(`App is connected to the database.`);
   } catch (error) {
     console.error(`Error connecting to DB: ${error.message}`);
